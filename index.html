@@ -66,9 +66,28 @@
   footer{padding:15px 0 5px}
 }
 
-</style></head><body><div class="app">
-<header class="top"><div class="brand"><div class="logo">⌁</div><div><b>LAKBAY</b><small>NATIONWIDE TRAVEL DIRECTORY</small></div></div><span class="tag">PROVINCE EXPLORER</span></header>
-<section class="hero"><small>PHILIPPINES · 18 REGIONS</small><h1>Explore the country, province by province.</h1><p>Choose an island group, then a region, then a province to discover notable places and activities.</p><div class="stats"><span><b>82</b> provinces</span><span><b>3</b> island groups</span><span><b id="savedCount">0</b> saved province plans</span></div></section>
+
+.mode-switch{display:flex;gap:7px;margin:13px 0 10px}
+.mode-switch button{border:1px solid var(--line);background:white;color:var(--muted);border-radius:10px;padding:9px 14px;font-weight:800;cursor:pointer}
+.mode-switch button.active{background:var(--ink);color:white;border-color:var(--ink)}
+.intl-layout{display:grid;grid-template-columns:310px 1fr;gap:13px;align-items:start}
+.intl-caption{font-size:11px;margin:3px 0 0}
+.intl-country-list{max-height:600px}
+.country-destinations{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.country-destination{border:1px solid var(--line);border-radius:10px;padding:12px;background:#f8faf7}
+.country-destination b{display:block;font-size:13px}
+.country-destination small{color:var(--muted);font-size:10px}
+@media(max-width:740px){
+ .mode-switch{position:sticky;top:92px;z-index:42;background:var(--bg);padding:5px 0;margin:5px 0 8px}
+ .mode-switch button{flex:1;padding:8px 7px;font-size:11px}
+ .intl-layout{display:flex;flex-direction:row;gap:9px;overflow-x:auto;overflow-y:visible;width:100%;padding:0 0 10px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+ .intl-layout>.panel{flex:0 0 88%;min-width:88%;scroll-snap-align:start;padding:11px}
+ .intl-country-list{max-height:48vh}
+ .country-destinations{grid-template-columns:1fr}
+}
+\n</style></head><body><div class="app">
+<header class="top"><div class="brand"><div class="logo">⌁</div><div><b>LAKBAY</b><small>LOCAL & INTERNATIONAL TRAVEL</small></div></div><span class="tag">TRAVEL EXPLORER</span></header>
+<section class="hero"><small>PHILIPPINES · 18 REGIONS</small><h1>Where do you want to travel?</h1><p>Choose local destinations in the Philippines or explore international countries.</p><div class="stats"><span><b>82</b> provinces</span><span><b>3</b> island groups</span><span><b id="savedCount">0</b> saved province plans</span></div></section>
 <nav class="nav"><button class="active" data-page="explore">Explore</button><button data-page="saved">My saved plans</button></nav>
 <section class="page active" id="explore">
 <div class="regions" id="regionButtons"></div>
@@ -141,6 +160,58 @@ document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>showPage(b.dat
 document.querySelectorAll('[data-days]').forEach(b=>b.onclick=()=>{days=+b.dataset.days;renderProvince()});
 $('search').oninput=()=>{if(selectedRegion)renderProvinceList();else if(island)renderRegionList()};
 $('backRegions').onclick=()=>{selectedRegion=null;province=null;selected=[];$('search').value='';renderRegionList();renderDetailPrompt()};
+
+const internationalCountries = [
+ {name:'Japan', hubs:['Tokyo','Osaka','Kyoto','Hokkaido','Fukuoka']},
+ {name:'South Korea', hubs:['Seoul','Busan','Jeju Island','Gyeongju']},
+ {name:'Singapore', hubs:['Marina Bay','Sentosa','Chinatown','Gardens by the Bay']},
+ {name:'Thailand', hubs:['Bangkok','Chiang Mai','Phuket','Krabi']},
+ {name:'Vietnam', hubs:['Hanoi','Da Nang','Hoi An','Ho Chi Minh City']},
+ {name:'Indonesia', hubs:['Bali','Jakarta','Yogyakarta','Lombok']},
+ {name:'Malaysia', hubs:['Kuala Lumpur','Penang','Langkawi','Sabah']},
+ {name:'Taiwan', hubs:['Taipei','Taichung','Kaohsiung','Hualien']},
+ {name:'Hong Kong', hubs:['Hong Kong Island','Kowloon','Lantau Island']},
+ {name:'Australia', hubs:['Sydney','Melbourne','Brisbane','Gold Coast']}
+];
+let travelMode='local', selectedCountry=null;
+function setTravelMode(mode){
+ travelMode=mode;
+ $('localMode').classList.toggle('active',mode==='local');
+ $('internationalMode').classList.toggle('active',mode==='international');
+ $('localExplorer').style.display=mode==='local'?'block':'none';
+ $('internationalExplorer').style.display=mode==='international'?'block':'none';
+ if(mode==='international') renderCountries();
+}
+function renderCountries(){
+ const q=$('countrySearch').value.trim().toLowerCase();
+ const matches=internationalCountries.filter(c=>c.name.toLowerCase().includes(q));
+ $('countryList').innerHTML=matches.map(c=>`<button class="province ${selectedCountry===c.name?'active':''}" data-country="${c.name}"><span>${c.name}</span><small>${c.hubs.length} travel hubs ›</small></button>`).join('') || '<div class="empty">No matching country found.</div>';
+ document.querySelectorAll('[data-country]').forEach(b=>b.onclick=()=>{
+   selectedCountry=b.dataset.country;
+   renderCountries();
+   renderCountryDetail();
+ });
+}
+function renderCountryDetail(){
+ const c=internationalCountries.find(x=>x.name===selectedCountry);
+ if(!c){
+   $('countryTitle').textContent='Explore internationally';
+   $('countrySubtitle').textContent='Choose a country from the list.';
+   $('countryCount').textContent=internationalCountries.length+' countries';
+   $('countryDescription').textContent='Choose a country to see suggested travel hubs and start planning your trip.';
+   $('countryDestinations').innerHTML="<div class='empty'>Choose a country to view its travel hubs.</div>";
+   return;
+ }
+ $('countryTitle').textContent=c.name;
+ $('countrySubtitle').textContent='International destination';
+ $('countryCount').textContent=c.hubs.length+' travel hubs';
+ $('countryDescription').textContent='These are suggested starting points for exploring '+c.name+'. Select a city or area as the focus of your trip.';
+ $('countryDestinations').innerHTML=c.hubs.map((hub,i)=>`<article class="country-destination"><b>${hub}</b><small>Suggested destination ${i+1} · ${c.name}</small></article>`).join('');
+}
+$('localMode').addEventListener('click',()=>setTravelMode('local'));
+$('internationalMode').addEventListener('click',()=>setTravelMode('international'));
+$('countrySearch').addEventListener('input',renderCountries);
+
 function renderAll(){renderRegions();if(!island){$('regionTitle').textContent='Choose an island group';$('regionMeta').textContent='Select Luzon, Visayas or Mindanao above.';$('search').style.display='none';$('regionList').innerHTML='<div class="empty">Select an island group to see its administrative regions.</div>';$('provinceList').style.display='none';$('backRegions').style.display='none';renderDetailPrompt();return}if(!selectedRegion){renderRegionList();renderDetailPrompt()}else{renderProvinceList();if(province)renderProvince();else renderDetailPrompt()}}
 renderAll();updateSavedCount();
 </script></body></html>

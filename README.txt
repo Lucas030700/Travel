@@ -1,17 +1,14 @@
-LAKBAY v6
+LAKBAY · Local & International Travel Explorer
 
-Files:
-- index.html: complete static travel directory app
+Deploy:
+1. Extract this ZIP.
+2. In Cloudflare Dashboard, open Workers & Pages > Create > Pages > Upload assets.
+3. Upload index.html and deploy. No build command is required.
 
-Cloudflare Pages deployment:
-1. Extract the ZIP.
-2. Open Cloudflare Dashboard > Workers & Pages > Create > Pages > Upload assets.
-3. Create a new Pages project and upload index.html.
-4. Deploy. No build command is required.
-
-v6 updates:
-- Compact hero section on mobile so the navigation controls take priority.
-- Sticky top brand header and sticky Explore / My saved plans navigation.
-- Mobile browse and province-detail panels now support horizontal swipe/scroll with snap positioning.
-- Desktop remains a two-column layout.
-- No photos or large image cards.
+What changed:
+- Added a Local · Philippines / International selector.
+- Local keeps the existing island group > region > province explorer.
+- International opens a searchable country list with suggested major travel hubs.
+- Starter country list: Japan, South Korea, Singapore, Thailand, Vietnam, Indonesia, Malaysia, Taiwan, Hong Kong and Australia.
+- Mobile layout remains compact, with sticky navigation and horizontal swipe panels.
+- Saved local province plans remain in browser storage on this device.
