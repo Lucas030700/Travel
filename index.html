@@ -85,11 +85,79 @@
  .intl-country-list{max-height:48vh}
  .country-destinations{grid-template-columns:1fr}
 }
-\n</style></head><body><div class="app">
+
+
+.checklist-shell{padding:18px}
+.checklist-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.checklist-head h2{margin:0 0 4px}
+.checklist-intro{font-size:12px;margin:0}
+.check-progress{text-align:right;min-width:110px}
+.check-progress strong{display:block;font-size:22px;color:var(--green)}
+.check-progress small{font-size:10px;color:var(--muted)}
+.progress-track{height:8px;border-radius:20px;background:#e8eee8;overflow:hidden;margin:13px 0}
+.progress-track>div{height:100%;width:0;background:var(--green);border-radius:20px;transition:width .2s}
+.check-mode{display:flex;gap:7px;margin:12px 0}
+.check-mode button{border:1px solid var(--line);background:white;color:var(--muted);border-radius:9px;padding:8px 12px;font-weight:750}
+.check-mode button.active{background:var(--ink);color:white;border-color:var(--ink)}
+.check-actions{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0 14px}
+.checklist-groups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.check-group{border:1px solid var(--line);border-radius:11px;padding:12px;background:#fff}
+.check-group h3{font-size:13px;margin:0 0 8px}
+.check-item{display:flex;gap:9px;align-items:flex-start;padding:7px 0;border-top:1px solid #f0f2ef;font-size:12px;cursor:pointer}
+.check-item:first-of-type{border-top:0}
+.check-item input{margin:2px 0 0;accent-color:var(--green);flex:0 0 auto}
+.check-item span{flex:1}
+.check-item.done span{text-decoration:line-through;color:var(--muted)}
+.custom-task{border-top:1px solid var(--line);margin-top:15px;padding-top:12px}
+.custom-task h3{font-size:13px;margin:0 0 7px}
+.custom-task-row{display:flex;gap:7px;align-items:center}
+.custom-task-row .search{margin:0;flex:1}
+@media(max-width:740px){
+ .checklist-shell{padding:12px}
+ .checklist-head h2{font-size:16px}
+ .check-progress{min-width:75px}
+ .check-progress strong{font-size:19px}
+ .checklist-groups{grid-template-columns:1fr}
+ .custom-task-row{align-items:stretch}
+ .custom-task-row .btn{white-space:nowrap}
+}
+
+
+.city-directory{border:1px solid var(--line);border-radius:11px;padding:11px;margin:10px 0;background:#fff}
+.city-directory h3{font-size:13px;margin:0 0 3px}
+.city-directory p{font-size:10px;color:var(--muted);margin:0 0 8px}
+.city-chips{display:flex;flex-wrap:wrap;gap:6px;max-height:150px;overflow:auto}
+.city-chip{border:1px solid var(--line);background:#f8faf7;color:var(--ink);border-radius:20px;padding:6px 9px;font-size:10px;font-weight:700;cursor:pointer}
+.city-chip.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+.city-selected-note{font-size:11px;padding:8px;background:var(--soft);border-radius:8px;margin-top:8px}
+
+</style></head><body><div class="app">
 <header class="top"><div class="brand"><div class="logo">⌁</div><div><b>LAKBAY</b><small>LOCAL & INTERNATIONAL TRAVEL</small></div></div><span class="tag">TRAVEL EXPLORER</span></header>
-<section class="hero"><small>PHILIPPINES · 18 REGIONS</small><h1>Where do you want to travel?</h1><p>Choose local destinations in the Philippines or explore international countries.</p><div class="stats"><span><b>82</b> provinces</span><span><b>3</b> island groups</span><span><b id="savedCount">0</b> saved province plans</span></div></section>
-<nav class="nav"><button class="active" data-page="explore">Explore</button><button data-page="saved">My saved plans</button></nav>
+<section class="hero"><small>PHILIPPINES · 18 REGIONS</small><h1>Where do you want to travel?</h1><p>Choose local destinations in the Philippines or explore international countries.</p><div class="stats"><span><b>82</b> provinces</span><span><b>149</b> cities</span><span><b>3</b> island groups</span><span><b id="savedCount">0</b> saved province plans</span></div></section>
+<nav class="nav"><button class="active" data-page="explore">Explore</button><button data-page="saved">My saved plans</button><button data-page="checklist">Travel checklist</button></nav>
 <section class="page active" id="explore">
+<div class="mode-switch" role="group" aria-label="Travel destination type">
+  <button class="active" id="localMode" type="button">Local · Philippines</button>
+  <button id="internationalMode" type="button">International</button>
+</div>
+<section id="internationalExplorer" style="display:none">
+  <div class="intl-layout">
+    <aside class="panel">
+      <h2>Choose a country</h2>
+      <p class="muted intl-caption">Select a country to explore its major travel hubs.</p>
+      <input id="countrySearch" class="search" placeholder="Search country...">
+      <div id="countryList" class="province-list intl-country-list"></div>
+    </aside>
+    <main class="panel right">
+      <div class="righthead"><div><h2 id="countryTitle">Explore internationally</h2><div class="subregions" id="countrySubtitle">Choose a country from the list.</div></div><span class="chip" id="countryCount">10 countries</span></div>
+      <div class="summary"><strong>INTERNATIONAL TRAVEL EXPLORER</strong><p id="countryDescription">Choose a country to see suggested travel hubs and start planning your trip.</p></div>
+      <div id="countryDestinations" class="country-destinations"><div class="empty">Choose a country to view its travel hubs.</div></div>
+      <p class="note">These are starter suggestions. Check visa rules, entry requirements, transport, fees and current travel advisories before booking.</p>
+    </main>
+  </div>
+</section>
+<div id="localExplorer">
+
 <div class="regions" id="regionButtons"></div>
 <div class="mobile-swipe-hint">Swipe left or right to move between lists and trip details</div><div class="layout"><aside class="panel">
 <div class="righthead"><div><h2 id="regionTitle">Choose an island group</h2><div class="muted" style="font-size:11px" id="regionMeta">Select Luzon, Visayas or Mindanao first.</div></div><button class="btn alt" id="backRegions" style="display:none">← Regions</button></div>
@@ -98,44 +166,114 @@
 <div class="province-list" id="provinceList" style="display:none"></div>
 </aside>
 <main class="panel right"><div class="righthead"><div><h2 id="provinceTitle">Choose a province</h2><div class="subregions" id="provinceSub">Select an island group, region and province</div></div><span class="chip" id="activityCount">Select a province</span></div><div class="summary"><strong>PLAN YOUR PROVINCE TRIP</strong><p id="provinceDesc">Start by choosing Luzon, Visayas or Mindanao. Your province details will appear here after you select a province.</p></div>
+<div id="cityDirectory" class="city-directory" style="display:none"></div>
 <div class="duration" id="durationButtons" style="display:none"><button data-days="1">1D</button><button data-days="2">2D / 1N</button><button class="active" data-days="3">3D / 2N</button><button data-days="4">4D / 3N</button><button data-days="5">5D / 4N</button></div>
 <div id="activities"></div><div class="itinerary" id="itinerary"></div><p class="note">Destination suggestions are a starter directory. Travel times, access, fees, opening days and safety conditions must be checked with local tourism offices and operators.</p></main></div>
+</div>
 </section>
 <section class="page" id="saved"><div class="panel"><h2>My saved province plans</h2><p class="muted" style="font-size:12px">Your saved destinations and selected activities on this browser.</p><div id="savedList"></div></div></section>
+
+<section class="page" id="checklist">
+  <div class="panel checklist-shell">
+    <div class="checklist-head">
+      <div>
+        <h2>Travel preparation checklist</h2>
+        <p class="muted checklist-intro">Check off what you have prepared. Your progress is saved on this device.</p>
+      </div>
+      <div class="check-progress"><strong id="checkProgress">0%</strong><small id="checkCount">0 of 0 completed</small></div>
+    </div>
+    <div class="progress-track"><div id="checkProgressBar"></div></div>
+    <div class="check-mode">
+      <button class="active" id="checkLocal" type="button">Local travel</button>
+      <button id="checkInternational" type="button">International travel</button>
+    </div>
+    <div class="check-actions">
+      <button class="btn alt" id="checkAllBtn" type="button">Mark all complete</button>
+      <button class="btn alt" id="resetChecklistBtn" type="button">Reset checklist</button>
+    </div>
+    <div id="checklistGroups" class="checklist-groups"></div>
+    <div class="custom-task">
+      <h3>Add your own preparation task</h3>
+      <div class="custom-task-row">
+        <input id="customTaskInput" class="search" maxlength="100" placeholder="e.g. Arrange pet sitter">
+        <button class="btn" id="addCustomTask" type="button">Add task</button>
+      </div>
+    </div>
+    <p class="note">Requirements vary by destination, airline, transport operator and traveler. Verify current government, immigration, airline and local advisories before departure.</p>
+  </div>
+</section>
+
 <footer>LAKBAY · Explore more. Travel farther.<br>Administrative province grouping based on the Philippine Statistics Authority PSGC.</footer></div>
 <script>
-const regions={"Luzon": {"CAR": ["Abra", "Apayao", "Benguet", "Ifugao", "Kalinga", "Mountain Province"], "Ilocos Region": ["Ilocos Norte", "Ilocos Sur", "La Union", "Pangasinan"], "Cagayan Valley": ["Batanes", "Cagayan", "Isabela", "Nueva Vizcaya", "Quirino"], "Central Luzon": ["Aurora", "Bataan", "Bulacan", "Nueva Ecija", "Pampanga", "Tarlac", "Zambales"], "CALABARZON": ["Batangas", "Cavite", "Laguna", "Quezon", "Rizal"], "MIMAROPA": ["Marinduque", "Occidental Mindoro", "Oriental Mindoro", "Palawan", "Romblon"], "Bicol Region": ["Albay", "Camarines Norte", "Camarines Sur", "Catanduanes", "Masbate", "Sorsogon"]}, "Visayas": {"Western Visayas": ["Aklan", "Antique", "Capiz", "Guimaras", "Iloilo"], "Negros Island Region": ["Negros Occidental", "Negros Oriental", "Siquijor"], "Central Visayas": ["Bohol", "Cebu"], "Eastern Visayas": ["Biliran", "Eastern Samar", "Leyte", "Northern Samar", "Samar", "Southern Leyte"]}, "Mindanao": {"Zamboanga Peninsula": ["Sulu", "Zamboanga del Norte", "Zamboanga del Sur", "Zamboanga Sibugay"], "Northern Mindanao": ["Bukidnon", "Camiguin", "Lanao del Norte", "Misamis Occidental", "Misamis Oriental"], "Davao Region": ["Davao de Oro", "Davao del Norte", "Davao del Sur", "Davao Occidental", "Davao Oriental"], "SOCCSKSARGEN": ["Cotabato", "Sarangani", "South Cotabato", "Sultan Kudarat"], "Caraga": ["Agusan del Norte", "Agusan del Sur", "Dinagat Islands", "Surigao del Norte", "Surigao del Sur"], "BARMM": ["Basilan", "Lanao del Sur", "Maguindanao del Norte", "Maguindanao del Sur", "Tawi-Tawi"]}}, activities={"Laguna": [["Pagsanjan", "Pagsanjan Falls / Magdapio Falls", "Waterfall adventure", "Full day", "Boat ride through the gorge and falls experience. Check operator rates and river conditions."], ["Majayjay", "Taytay Falls", "Nature & swimming", "Half day", "Short nature walk to a multi-tiered waterfall. Check local access and safety advisories."], ["San Pablo City", "Seven Lakes of San Pablo", "Lakes & nature", "Half day", "Visit Sampaloc, Pandin, Yambo and other crater lakes; arrange local transport."], ["Nagcarlan", "Nagcarlan Underground Cemetery", "Heritage", "1–2 hours", "Explore a unique historic cemetery and museum; confirm visiting hours."], ["Liliw", "Footwear & tsinelas shops", "Local shopping", "1–2 hours", "Browse locally made footwear and try nearby native snacks."], ["Paete", "Woodcarving & taka craft", "Arts & culture", "1–2 hours", "Discover the town's carving and papier-mâché traditions."], ["Cavinti", "Cavinti Underground River and Cave", "Caving & nature", "Half day", "Guided cave/river adventure; advance coordination may be needed."], ["Los Baños", "Makiling Botanic Gardens / hot spring area", "Nature & wellness", "Half day", "Choose a nature walk or nearby hot spring experience; check access rules."]], "Batangas": [["Nasugbu", "Mt. Batulao", "Hiking", "Full day", "Popular ridge hike; check trail status and guide requirements."], ["Tingloy", "Masasa Beach", "Beach", "Full day", "Boat trip to a quiet beach; check sea conditions."], ["Taal", "Taal Heritage Town", "Heritage", "Half day", "Walk among ancestral houses and historic landmarks."]], "Cavite": [["Tagaytay", "People's Park in the Sky", "Viewpoint", "Half day", "Panoramic highland views; check current access."], ["Maragondon", "Bonifacio Trial House", "Heritage", "1–2 hours", "Visit an important site in Philippine revolutionary history."]], "Quezon": [["Lucban", "Kamay ni Hesus Shrine", "Faith & culture", "Half day", "Visit the hilltop shrine and pilgrimage complex."], ["Real", "Balagbag Falls", "Waterfall", "Half day", "Nature stop; confirm road and trail conditions."]], "Rizal": [["Tanay", "Daranak Falls", "Waterfall", "Half day", "Swimming and waterfall visit; follow local safety rules."], ["Baras", "Palo Alto Falls area", "Nature", "Half day", "Check current access and available activities."]], "Palawan": [["El Nido", "Bacuit Bay island-hopping", "Island adventure", "Full day", "Choose accredited tours and check environmental fees."], ["Coron", "Kayangan Lake", "Lake & snorkeling", "Full day", "Boat tour to a famous clear-water lake; expect an entry fee."], ["San Vicente", "Long Beach", "Beach", "Half day", "Explore a long stretch of coastline; check local transport."]], "Bohol": [["Carmen", "Chocolate Hills", "Nature landmark", "Half day", "Visit the viewing complex and nearby countryside attractions."], ["Loboc", "Loboc River", "River experience", "Half day", "River cruise or other local river activities."], ["Panglao", "Balicasag Island", "Marine activity", "Full day", "Snorkeling and diving with local operators; check marine rules."]], "Cebu": [["Badian", "Kawasan Falls", "Waterfall & canyoning", "Full day", "Use accredited guides and check canyoning conditions."], ["Moalboal", "Sardine Run", "Snorkeling", "Half day", "Shore-based marine experience; follow wildlife distance rules."], ["Bantayan", "Bantayan Island beaches", "Beach", "Full day", "Explore beaches and island communities."]], "Negros Oriental": [["Dauin", "Marine sanctuary diving", "Diving", "Half day", "Book with licensed dive operators."], ["Apo Island", "Apo Island marine sanctuary", "Snorkeling", "Full day", "Observe turtles responsibly and follow sanctuary guidelines."]], "Aklan": [["Malay", "Boracay White Beach", "Beach", "Full day", "Beach activities and island experiences; follow local environmental rules."]], "Siargao": [["General Luna", "Cloud 9", "Surfing", "Half day", "Surf viewing or lessons with local instructors."], ["Del Carmen", "Sugba Lagoon", "Kayaking & lagoon", "Half day", "Boat trip and lagoon activities; check local booking arrangements."]], "Surigao del Norte": [["General Luna", "Cloud 9", "Surfing", "Half day", "Surfing and boardwalk visit."], ["Burgos", "Magpupungko Rock Pools", "Rock pools", "Half day", "Visit only when tide conditions are safe; check tide tables."]], "Ilocos Sur": [["Vigan", "Calle Crisologo", "Heritage", "Half day", "Explore the historic street and nearby museums."], ["Santa Maria", "Santa Maria Church", "Heritage", "1–2 hours", "Visit the UNESCO-listed church complex."]], "Ilocos Norte": [["Burgos", "Kapurpurawan Rock Formation", "Coastal nature", "Half day", "Walk to the white limestone formations; observe safety restrictions."], ["Pagudpud", "Saud Beach", "Beach", "Half day", "Enjoy the coastline and local food."]], "Pangasinan": [["Bolinao", "Patar Beach", "Beach", "Half day", "Coastal visit and nearby rock formations."], ["Bolinao", "Enchanted Cave", "Cave pool", "1–2 hours", "Check current opening and swimming rules."]], "Benguet": [["Atok", "Northern Blossom Flower Farm", "Farm & viewpoint", "Half day", "Seasonal flower farm and mountain scenery; reserve if required."], ["Kabayan", "Mount Pulag area", "Hiking", "Overnight", "Coordinate permits and accredited guides in advance."]], "Ifugao": [["Banaue", "Banaue Rice Terraces", "Cultural landscape", "Half day", "Visit viewpoints and local heritage sites."], ["Banaue", "Batad Rice Terraces", "Trekking", "Full day", "Guided trek to the amphitheater terraces and village."]], "Batanes": [["Basco", "Basco Lighthouse", "Viewpoint", "1–2 hours", "Coastal views and sunset stop."], ["Mahatao", "Racuh a Payaman", "Scenic landscape", "Half day", "Visit rolling hills and coastal scenery; respect grazing areas."]], "Albay": [["Legazpi City", "Mayon Volcano viewpoints", "Nature & viewpoint", "Half day", "Check volcano activity bulletins and restricted zones."], ["Daraga", "Cagsawa Ruins", "Heritage & viewpoint", "1–2 hours", "Historic church ruins with Mayon views."]], "Camarines Sur": [["Caramoan", "Caramoan Islands", "Island hopping", "Full day", "Boat tours depend on sea and weather conditions."], ["Pili", "Camsur Watersports Complex", "Water activities", "Half day", "Check current operations and activity availability."]], "Camiguin": [["Mambajao", "White Island", "Sandbar", "Half day", "Boat trip; sandbar appearance changes with tide."], ["Catarman", "Sunken Cemetery", "Heritage & viewpoint", "1–2 hours", "Coastal landmark and cross viewpoint."]], "Misamis Oriental": [["Jasaan", "Agutayan White Island", "Island & snorkeling", "Half day", "Boat trip; check sea conditions and local arrangements."]], "Bukidnon": [["Manolo Fortich", "Dahilayan Adventure Park", "Adventure activities", "Full day", "Check current ride availability and age/height requirements."], ["Impasug-ong", "Communal Ranch", "Scenic viewpoint", "Half day", "Visit the highland ranch landscape; respect local rules."]], "Davao Oriental": [["Mati", "Dahican Beach", "Beach & surfing", "Half day", "Beach activities and surf lessons with local instructors."]], "Agusan del Norte": [["Cabadbaran", "Mount Hilong-Hilong area", "Hiking", "Overnight", "Coordinate with local guides and check trail conditions."]], "Zamboanga del Sur": [["Pagadian City", "Dao-Dao Islands", "Island visit", "Half day", "Boat access and conditions should be checked locally."]], "Marinduque": [["Boac", "Boac Heritage District", "Heritage", "Half day", "Walk around the historic town center and church."]], "Romblon": [["Romblon", "Bonbon Beach", "Beach", "Half day", "Visit the sandbar and check tide conditions."]], "Guimaras": [["Nueva Valencia", "Alubihod Beach", "Beach & island hopping", "Half day", "Explore coves and book local boat tours."]], "Siquijor": [["San Juan", "Cambugahay Falls", "Waterfall", "Half day", "Multi-tiered falls; follow local safety and access rules."]], "Catanduanes": [["Baras", "Binurong Point", "Coastal hike", "Half day", "Scenic coastal trail; check weather and local guide advice."]], "Sorsogon": [["Donsol", "Whale shark interaction", "Wildlife experience", "Half day", "Follow accredited, responsible wildlife interaction rules and seasonal guidance."]]};
+const regions={"Luzon": {"National Capital Region (NCR)": [],"CAR": ["Abra", "Apayao", "Benguet", "Ifugao", "Kalinga", "Mountain Province"], "Ilocos Region": ["Ilocos Norte", "Ilocos Sur", "La Union", "Pangasinan"], "Cagayan Valley": ["Batanes", "Cagayan", "Isabela", "Nueva Vizcaya", "Quirino"], "Central Luzon": ["Aurora", "Bataan", "Bulacan", "Nueva Ecija", "Pampanga", "Tarlac", "Zambales"], "CALABARZON": ["Batangas", "Cavite", "Laguna", "Quezon", "Rizal"], "MIMAROPA": ["Marinduque", "Occidental Mindoro", "Oriental Mindoro", "Palawan", "Romblon"], "Bicol Region": ["Albay", "Camarines Norte", "Camarines Sur", "Catanduanes", "Masbate", "Sorsogon"]}, "Visayas": {"Western Visayas": ["Aklan", "Antique", "Capiz", "Guimaras", "Iloilo"], "Negros Island Region": ["Negros Occidental", "Negros Oriental", "Siquijor"], "Central Visayas": ["Bohol", "Cebu"], "Eastern Visayas": ["Biliran", "Eastern Samar", "Leyte", "Northern Samar", "Samar", "Southern Leyte"]}, "Mindanao": {"Zamboanga Peninsula": ["Sulu", "Zamboanga del Norte", "Zamboanga del Sur", "Zamboanga Sibugay"], "Northern Mindanao": ["Bukidnon", "Camiguin", "Lanao del Norte", "Misamis Occidental", "Misamis Oriental"], "Davao Region": ["Davao de Oro", "Davao del Norte", "Davao del Sur", "Davao Occidental", "Davao Oriental"], "SOCCSKSARGEN": ["Cotabato", "Sarangani", "South Cotabato", "Sultan Kudarat"], "Caraga": ["Agusan del Norte", "Agusan del Sur", "Dinagat Islands", "Surigao del Norte", "Surigao del Sur"], "BARMM": ["Basilan", "Lanao del Sur", "Maguindanao del Norte", "Maguindanao del Sur", "Tawi-Tawi"]}}, activities={"Laguna": [["Pagsanjan", "Pagsanjan Falls / Magdapio Falls", "Waterfall adventure", "Full day", "Boat ride through the gorge and falls experience. Check operator rates and river conditions."], ["Majayjay", "Taytay Falls", "Nature & swimming", "Half day", "Short nature walk to a multi-tiered waterfall. Check local access and safety advisories."], ["San Pablo City", "Seven Lakes of San Pablo", "Lakes & nature", "Half day", "Visit Sampaloc, Pandin, Yambo and other crater lakes; arrange local transport."], ["Nagcarlan", "Nagcarlan Underground Cemetery", "Heritage", "1–2 hours", "Explore a unique historic cemetery and museum; confirm visiting hours."], ["Liliw", "Footwear & tsinelas shops", "Local shopping", "1–2 hours", "Browse locally made footwear and try nearby native snacks."], ["Paete", "Woodcarving & taka craft", "Arts & culture", "1–2 hours", "Discover the town's carving and papier-mâché traditions."], ["Cavinti", "Cavinti Underground River and Cave", "Caving & nature", "Half day", "Guided cave/river adventure; advance coordination may be needed."], ["Los Baños", "Makiling Botanic Gardens / hot spring area", "Nature & wellness", "Half day", "Choose a nature walk or nearby hot spring experience; check access rules."]], "Batangas": [["Nasugbu", "Mt. Batulao", "Hiking", "Full day", "Popular ridge hike; check trail status and guide requirements."], ["Tingloy", "Masasa Beach", "Beach", "Full day", "Boat trip to a quiet beach; check sea conditions."], ["Taal", "Taal Heritage Town", "Heritage", "Half day", "Walk among ancestral houses and historic landmarks."]], "Cavite": [["Tagaytay", "People's Park in the Sky", "Viewpoint", "Half day", "Panoramic highland views; check current access."], ["Maragondon", "Bonifacio Trial House", "Heritage", "1–2 hours", "Visit an important site in Philippine revolutionary history."]], "Quezon": [["Lucban", "Kamay ni Hesus Shrine", "Faith & culture", "Half day", "Visit the hilltop shrine and pilgrimage complex."], ["Real", "Balagbag Falls", "Waterfall", "Half day", "Nature stop; confirm road and trail conditions."]], "Rizal": [["Tanay", "Daranak Falls", "Waterfall", "Half day", "Swimming and waterfall visit; follow local safety rules."], ["Baras", "Palo Alto Falls area", "Nature", "Half day", "Check current access and available activities."]], "Palawan": [["El Nido", "Bacuit Bay island-hopping", "Island adventure", "Full day", "Choose accredited tours and check environmental fees."], ["Coron", "Kayangan Lake", "Lake & snorkeling", "Full day", "Boat tour to a famous clear-water lake; expect an entry fee."], ["San Vicente", "Long Beach", "Beach", "Half day", "Explore a long stretch of coastline; check local transport."]], "Bohol": [["Carmen", "Chocolate Hills", "Nature landmark", "Half day", "Visit the viewing complex and nearby countryside attractions."], ["Loboc", "Loboc River", "River experience", "Half day", "River cruise or other local river activities."], ["Panglao", "Balicasag Island", "Marine activity", "Full day", "Snorkeling and diving with local operators; check marine rules."]], "Cebu": [["Badian", "Kawasan Falls", "Waterfall & canyoning", "Full day", "Use accredited guides and check canyoning conditions."], ["Moalboal", "Sardine Run", "Snorkeling", "Half day", "Shore-based marine experience; follow wildlife distance rules."], ["Bantayan", "Bantayan Island beaches", "Beach", "Full day", "Explore beaches and island communities."]], "Negros Oriental": [["Dauin", "Marine sanctuary diving", "Diving", "Half day", "Book with licensed dive operators."], ["Apo Island", "Apo Island marine sanctuary", "Snorkeling", "Full day", "Observe turtles responsibly and follow sanctuary guidelines."]], "Aklan": [["Malay", "Boracay White Beach", "Beach", "Full day", "Beach activities and island experiences; follow local environmental rules."]], "Siargao": [["General Luna", "Cloud 9", "Surfing", "Half day", "Surf viewing or lessons with local instructors."], ["Del Carmen", "Sugba Lagoon", "Kayaking & lagoon", "Half day", "Boat trip and lagoon activities; check local booking arrangements."]], "Surigao del Norte": [["General Luna", "Cloud 9", "Surfing", "Half day", "Surfing and boardwalk visit."], ["Burgos", "Magpupungko Rock Pools", "Rock pools", "Half day", "Visit only when tide conditions are safe; check tide tables."]], "Ilocos Sur": [["Vigan", "Calle Crisologo", "Heritage", "Half day", "Explore the historic street and nearby museums."], ["Santa Maria", "Santa Maria Church", "Heritage", "1–2 hours", "Visit the UNESCO-listed church complex."]], "Ilocos Norte": [["Burgos", "Kapurpurawan Rock Formation", "Coastal nature", "Half day", "Walk to the white limestone formations; observe safety restrictions."], ["Pagudpud", "Saud Beach", "Beach", "Half day", "Enjoy the coastline and local food."]], "Pangasinan": [["Bolinao", "Patar Beach", "Beach", "Half day", "Coastal visit and nearby rock formations."], ["Bolinao", "Enchanted Cave", "Cave pool", "1–2 hours", "Check current opening and swimming rules."]], "Benguet": [["Atok", "Northern Blossom Flower Farm", "Farm & viewpoint", "Half day", "Seasonal flower farm and mountain scenery; reserve if required."], ["Kabayan", "Mount Pulag area", "Hiking", "Overnight", "Coordinate permits and accredited guides in advance."]], "Ifugao": [["Banaue", "Banaue Rice Terraces", "Cultural landscape", "Half day", "Visit viewpoints and local heritage sites."], ["Banaue", "Batad Rice Terraces", "Trekking", "Full day", "Guided trek to the amphitheater terraces and village."]], "Batanes": [["Basco", "Basco Lighthouse", "Viewpoint", "1–2 hours", "Coastal views and sunset stop."], ["Mahatao", "Racuh a Payaman", "Scenic landscape", "Half day", "Visit rolling hills and coastal scenery; respect grazing areas."]], "Albay": [["Legazpi City", "Mayon Volcano viewpoints", "Nature & viewpoint", "Half day", "Check volcano activity bulletins and restricted zones."], ["Daraga", "Cagsawa Ruins", "Heritage & viewpoint", "1–2 hours", "Historic church ruins with Mayon views."]], "Camarines Sur": [["Caramoan", "Caramoan Islands", "Island hopping", "Full day", "Boat tours depend on sea and weather conditions."], ["Pili", "Camsur Watersports Complex", "Water activities", "Half day", "Check current operations and activity availability."]], "Camiguin": [["Mambajao", "White Island", "Sandbar", "Half day", "Boat trip; sandbar appearance changes with tide."], ["Catarman", "Sunken Cemetery", "Heritage & viewpoint", "1–2 hours", "Coastal landmark and cross viewpoint."]], "Misamis Oriental": [["Jasaan", "Agutayan White Island", "Island & snorkeling", "Half day", "Boat trip; check sea conditions and local arrangements."]], "Bukidnon": [["Manolo Fortich", "Dahilayan Adventure Park", "Adventure activities", "Full day", "Check current ride availability and age/height requirements."], ["Impasug-ong", "Communal Ranch", "Scenic viewpoint", "Half day", "Visit the highland ranch landscape; respect local rules."]], "Davao Oriental": [["Mati", "Dahican Beach", "Beach & surfing", "Half day", "Beach activities and surf lessons with local instructors."]], "Agusan del Norte": [["Cabadbaran", "Mount Hilong-Hilong area", "Hiking", "Overnight", "Coordinate with local guides and check trail conditions."]], "Zamboanga del Sur": [["Pagadian City", "Dao-Dao Islands", "Island visit", "Half day", "Boat access and conditions should be checked locally."]], "Marinduque": [["Boac", "Boac Heritage District", "Heritage", "Half day", "Walk around the historic town center and church."]], "Romblon": [["Romblon", "Bonbon Beach", "Beach", "Half day", "Visit the sandbar and check tide conditions."]], "Guimaras": [["Nueva Valencia", "Alubihod Beach", "Beach & island hopping", "Half day", "Explore coves and book local boat tours."]], "Siquijor": [["San Juan", "Cambugahay Falls", "Waterfall", "Half day", "Multi-tiered falls; follow local safety and access rules."]], "Catanduanes": [["Baras", "Binurong Point", "Coastal hike", "Half day", "Scenic coastal trail; check weather and local guide advice."]], "Sorsogon": [["Donsol", "Whale shark interaction", "Wildlife experience", "Half day", "Follow accredited, responsible wildlife interaction rules and seasonal guidance."]]};
 const allProvinces=Object.entries(regions).flatMap(([island,groups])=>Object.entries(groups).flatMap(([region,provs])=>provs.map(name=>({name,island,region}))));
 const $=id=>document.getElementById(id);let island=null,selectedRegion=null,province=null,days=3,selected=[],saved=JSON.parse(localStorage.getItem('lakbayProvincePlansV2')||'[]');
 function provinceObj(){return allProvinces.find(p=>p.name===province)}
 function renderRegions(){
  $('regionButtons').innerHTML=['Luzon','Visayas','Mindanao'].map(k=>`<button data-island="${k}" class="${island===k?'active':''}"><b>${k}</b><small>${Object.values(regions[k]).flat().length} provinces</small></button>`).join('');
- document.querySelectorAll('[data-island]').forEach(b=>b.onclick=()=>{island=b.dataset.island;selectedRegion=null;province=null;selected=[];renderAll()});
+ document.querySelectorAll('[data-island]').forEach(b=>b.onclick=()=>{island=b.dataset.island;selectedRegion=null;province=null;selectedCity=null;selected=[];renderAll()});
 }
 function renderRegionList(){
  $('search').style.display='block';$('search').placeholder='Search region...';$('provinceList').style.display='none';$('regionList').style.display='flex';$('backRegions').style.display='none';
  $('regionTitle').textContent=island+' regions';$('regionMeta').textContent=Object.keys(regions[island]).length+' administrative regions';
  const q=$('search').value.toLowerCase();
  const entries=Object.entries(regions[island]).filter(([r])=>r.toLowerCase().includes(q));
- $('regionList').innerHTML=entries.map(([r,ps])=>`<button class="province" data-region="${r}"><span>${r}</span><small>${ps.length} provinces ›</small></button>`).join('');
- document.querySelectorAll('[data-region]').forEach(b=>b.onclick=()=>{selectedRegion=b.dataset.region;province=null;selected=[];$('search').value='';renderProvinceList();renderDetailPrompt()});
+ $('regionList').innerHTML=entries.map(([r,ps])=>`<button class="province" data-region="${r}"><span>${r}</span><small>${r==='National Capital Region (NCR)'?16:ps.length} ${r==='National Capital Region (NCR)'?'cities':'provinces'} ›</small></button>`).join('');
+ document.querySelectorAll('[data-region]').forEach(b=>b.onclick=()=>{selectedRegion=b.dataset.region;province=null;selectedCity=null;selected=[];$('search').value='';renderProvinceList();renderDetailPrompt()});
 }
 function renderProvinceList(){
  $('search').style.display='block';$('search').placeholder='Search province...';$('regionList').style.display='none';$('provinceList').style.display='flex';$('backRegions').style.display='inline-block';
- $('regionTitle').textContent=selectedRegion;$('regionMeta').textContent=island+' · '+regions[island][selectedRegion].length+' provinces';
+ $('regionTitle').textContent=selectedRegion;
+ if(selectedRegion==='National Capital Region (NCR)'){
+   $('regionMeta').textContent='Luzon · 16 cities';
+   const q=$('search').value.toLowerCase();
+   const arr=(citiesByProvince.NCR||[]).filter(c=>c.toLowerCase().includes(q));
+   $('provinceList').innerHTML=arr.map(c=>`<button class="province ${selectedCity===c?'active':''}" data-ncr-city="${c}"><span>${c}</span><small>Open ›</small></button>`).join('');
+   document.querySelectorAll('[data-ncr-city]').forEach(b=>b.onclick=()=>{selectedCity=b.dataset.ncrCity;renderProvinceList();renderNCRCityDetail()});
+   return;
+ }
+ $('regionMeta').textContent=island+' · '+regions[island][selectedRegion].length+' provinces';
  const q=$('search').value.toLowerCase();
  const arr=regions[island][selectedRegion].filter(p=>p.toLowerCase().includes(q));
- $('provinceList').innerHTML=arr.map(p=>`<button class="province ${province===p?'active':''}" data-province="${p}"><span>${p}</span><small>Open ›</small></button>`).join('');
- document.querySelectorAll('[data-province]').forEach(b=>b.onclick=()=>{province=b.dataset.province;selected=[];renderProvinceList();renderProvince()});
+ $('provinceList').innerHTML=arr.map(p=>`<button class="province ${province===p?'active':''}" data-province="${p}"><span>${p}</span><small>${(citiesByProvince[p]||[]).length} cities · Open ›</small></button>`).join('');
+ document.querySelectorAll('[data-province]').forEach(b=>b.onclick=()=>{province=b.dataset.province;selectedCity=null;selected=[];renderProvinceList();renderProvince()});
 }
 function renderDetailPrompt(){
  $('provinceTitle').textContent='Choose a province';$('provinceSub').textContent=selectedRegion+' · '+island;$('activityCount').textContent='Select a province';
  $('provinceDesc').textContent='Choose a province from the list on the left to see its notable destinations, hidden gems and activities.';
- $('durationButtons').style.display='none';$('activities').innerHTML='<div class="empty">Your province activities will appear here after you select a province.</div>';$('itinerary').innerHTML='';
+ $('durationButtons').style.display='none';$('cityDirectory').style.display='none';$('activities').innerHTML='<div class="empty">Your province activities will appear here after you select a province.</div>';$('itinerary').innerHTML='';
 }
+
+const citiesByProvince = {"NCR":["Caloocan","Las Piñas","Makati","Malabon","Mandaluyong","Manila","Marikina","Muntinlupa","Navotas","Parañaque","Pasay","Pasig","Quezon City","San Juan","Taguig","Valenzuela"],"Kalinga":["Tabuk"],"Benguet":["Baguio"],"Ilocos Norte":["Batac","Laoag"],"Ilocos Sur":["Candon","Vigan"],"La Union":["San Fernando"],"Pangasinan":["Alaminos","Dagupan","San Carlos","Urdaneta"],"Cagayan":["Tuguegarao"],"Isabela":["Cauayan","Ilagan","Santiago"],"Bataan":["Balanga"],"Bulacan":["Baliwag","Malolos","Meycauayan","San Jose del Monte"],"Nueva Ecija":["Cabanatuan","Gapan","Science City of Muñoz","Palayan","San Jose"],"Pampanga":["Mabalacat","San Fernando","Angeles"],"Tarlac":["Tarlac"],"Zambales":["Olongapo"],"Batangas":["Batangas City","Calaca","Lipa","Santo Tomas","Tanauan"],"Cavite":["Bacoor","Carmona","Cavite City","Dasmariñas","General Trias","Imus","Tagaytay","Trece Martires"],"Laguna":["Biñan","Cabuyao","Calamba","San Pablo","San Pedro","Santa Rosa"],"Quezon":["Tayabas","Lucena"],"Rizal":["Antipolo"],"Albay":["Legazpi","Ligao","Tabaco"],"Camarines Sur":["Iriga","Naga"],"Masbate":["Masbate City"],"Sorsogon":["Sorsogon City"],"Capiz":["Roxas"],"Iloilo":["Passi","Iloilo City"],"Negros Occidental":["Bago","Cadiz","Escalante","Himamaylan","Kabankalan","La Carlota","Sagay","San Carlos","Silay","Sipalay","Talisay","Victorias","Bacolod"],"Negros Oriental":["Bais","Bayawan","Canlaon","Dumaguete","Guihulngan","Tanjay"],"Bohol":["Tagbilaran"],"Cebu":["Bogo","Carcar","Danao","Naga","Talisay","Toledo","Cebu City","Lapu-Lapu","Mandaue"],"Eastern Samar":["Borongan"],"Leyte":["Baybay","Ormoc","Tacloban"],"Samar":["Calbayog","Catbalogan"],"Southern Leyte":["Maasin"],"Zamboanga del Norte":["Dapitan","Dipolog"],"Zamboanga del Sur":["Pagadian","Zamboanga City"],"Basilan":["Isabela City","Lamitan"],"Bukidnon":["Malaybalay","Valencia"],"Misamis Occidental":["Oroquieta","Ozamiz","Tangub"],"Misamis Oriental":["El Salvador","Gingoog","Cagayan de Oro"],"Lanao del Norte":["Iligan"],"Davao del Norte":["Panabo","Island Garden City of Samal","Tagum"],"Davao del Sur":["Digos","Davao City"],"Davao Oriental":["Mati"],"Cotabato":["Kidapawan"],"South Cotabato":["Koronadal"],"Sultan Kudarat":["Tacurong"],"Sarangani":["General Santos"],"Agusan del Norte":["Cabadbaran","Butuan"],"Agusan del Sur":["Bayugan"],"Surigao del Norte":["Surigao City"],"Surigao del Sur":["Bislig","Tandag"],"Lanao del Sur":["Marawi"],"Maguindanao del Norte":["Cotabato City"],"Oriental Mindoro":["Calapan"],"Palawan":["Puerto Princesa"]};
+let selectedCity=null;
+function renderCityDirectory(){
+ const box=$('cityDirectory');
+ if(selectedRegion==='National Capital Region (NCR)'){
+   const arr=citiesByProvince.NCR||[];
+   box.style.display='block';
+   box.innerHTML=`<h3>Choose a city in Metro Manila</h3><p>National Capital Region · ${arr.length} cities</p><div class="city-chips">${arr.map(c=>`<button class="city-chip ${selectedCity===c?'active':''}" data-city="${c}">${c}</button>`).join('')}</div>${selectedCity?`<div class="city-selected-note"><b>${selectedCity}</b> selected. City-specific attractions and trip details can be added to this directory next.</div>`:''}`;
+ } else {
+   const arr=citiesByProvince[province]||[];
+   if(!arr.length){box.style.display='none';box.innerHTML='';return}
+   box.style.display='block';
+   box.innerHTML=`<h3>Cities in ${province}</h3><p>${arr.length} cities listed · Select a city to focus your trip</p><div class="city-chips">${arr.map(c=>`<button class="city-chip ${selectedCity===c?'active':''}" data-city="${c}">${c}</button>`).join('')}</div>${selectedCity?`<div class="city-selected-note"><b>${selectedCity}</b> selected. The province directory remains available while city-specific recommendations are being expanded.</div>`:''}`;
+ }
+ document.querySelectorAll('[data-city]').forEach(b=>b.onclick=()=>{selectedCity=b.dataset.city;renderCityDirectory();if(selectedRegion==='National Capital Region (NCR)')renderNCRCityDetail();});
+}
+function renderNCRCityDetail(){
+ $('provinceTitle').textContent=selectedCity||'Choose a city';
+ $('provinceSub').textContent='National Capital Region · Luzon';
+ $('activityCount').textContent='City directory';
+ $('provinceDesc').textContent=selectedCity?`You selected ${selectedCity}. City-specific attractions, suggested itineraries and budgets will be added as the directory is expanded.`:'Choose a city in Metro Manila from the list.';
+ $('durationButtons').style.display='none';
+ $('activities').innerHTML='<div class="empty">City destination recommendations are not yet curated for this location.</div>';
+ $('itinerary').innerHTML='';
+}
+
 function renderProvince(){
+ if(selectedRegion==='National Capital Region (NCR)'){renderNCRCityDetail();return}
  let p=provinceObj();if(!p){renderDetailPrompt();return}
- $('provinceTitle').textContent=province;$('provinceSub').textContent=p.region+' · '+p.island;let list=activities[province]||[];
+ $('provinceTitle').textContent=province;$('provinceSub').textContent=p.region+' · '+p.island;renderCityDirectory();let list=activities[province]||[];
  $('activityCount').textContent=list.length?list.length+' highlights':'Research needed';
  $('provinceDesc').textContent=list.length?'Explore notable places, local experiences and activities. Select the ones you want to include in your '+days+'-day trip.':'This province is included in the directory. Its attraction list is awaiting local tourism research and verification, rather than showing unverified recommendations.';
  $('durationButtons').style.display='flex';
@@ -155,27 +293,27 @@ function updateSavedCount(){$('savedCount').textContent=saved.length}
 function renderSaved(){$('savedList').innerHTML=saved.length?saved.map(s=>`<div class="saveditem"><div><b>${s.province}</b><div class="muted" style="font-size:11px">${s.region||''} · ${s.days} days / ${Math.max(0,s.days-1)} nights · ${s.activities.length} activities</div><div class="muted" style="font-size:11px">${s.activities.join(', ')}</div></div><button class="btn alt" onclick="loadPlan('${s.province}')">Open</button><button class="btn alt" onclick="removePlan('${s.province}')">Remove</button></div>`).join(''):'<div class="empty">No saved plans yet.</div>'}
 function loadPlan(name){let s=saved.find(x=>x.province===name);province=name;island=s.island||provinceObj()?.island||'Luzon';selectedRegion=s.region||provinceObj()?.region;days=s.days;selected=(activities[name]||[]).map((a,i)=>s.activities.includes(a[1])?i:-1).filter(i=>i>=0);showPage('explore');renderAll();renderProvinceList();renderProvince()}
 function removePlan(name){saved=saved.filter(s=>s.province!==name);localStorage.setItem('lakbayProvincePlansV2',JSON.stringify(saved));renderSaved();updateSavedCount()}
-function showPage(p){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===p));document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===p));if(p==='saved')renderSaved()}
+function showPage(p){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===p));document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===p));if(p==='saved')renderSaved();if(p==='checklist')renderChecklist()}
 document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>showPage(b.dataset.page));
 document.querySelectorAll('[data-days]').forEach(b=>b.onclick=()=>{days=+b.dataset.days;renderProvince()});
 $('search').oninput=()=>{if(selectedRegion)renderProvinceList();else if(island)renderRegionList()};
-$('backRegions').onclick=()=>{selectedRegion=null;province=null;selected=[];$('search').value='';renderRegionList();renderDetailPrompt()};
+$('backRegions').onclick=()=>{selectedRegion=null;province=null;selectedCity=null;selected=[];$('search').value='';renderRegionList();renderDetailPrompt()};
+function renderAll(){renderRegions();if(!island){$('regionTitle').textContent='Choose an island group';$('regionMeta').textContent='Select Luzon, Visayas or Mindanao above.';$('search').style.display='none';$('regionList').innerHTML='<div class="empty">Select an island group to see its administrative regions.</div>';$('provinceList').style.display='none';$('backRegions').style.display='none';renderDetailPrompt();return}if(!selectedRegion){renderRegionList();renderDetailPrompt()}else{renderProvinceList();if(province)renderProvince();else renderDetailPrompt()}}
 
 const internationalCountries = [
- {name:'Japan', hubs:['Tokyo','Osaka','Kyoto','Hokkaido','Fukuoka']},
- {name:'South Korea', hubs:['Seoul','Busan','Jeju Island','Gyeongju']},
- {name:'Singapore', hubs:['Marina Bay','Sentosa','Chinatown','Gardens by the Bay']},
- {name:'Thailand', hubs:['Bangkok','Chiang Mai','Phuket','Krabi']},
- {name:'Vietnam', hubs:['Hanoi','Da Nang','Hoi An','Ho Chi Minh City']},
- {name:'Indonesia', hubs:['Bali','Jakarta','Yogyakarta','Lombok']},
- {name:'Malaysia', hubs:['Kuala Lumpur','Penang','Langkawi','Sabah']},
- {name:'Taiwan', hubs:['Taipei','Taichung','Kaohsiung','Hualien']},
- {name:'Hong Kong', hubs:['Hong Kong Island','Kowloon','Lantau Island']},
- {name:'Australia', hubs:['Sydney','Melbourne','Brisbane','Gold Coast']}
+ {name:'Japan',hubs:['Tokyo','Osaka','Kyoto','Hokkaido','Fukuoka']},
+ {name:'South Korea',hubs:['Seoul','Busan','Jeju Island','Gyeongju']},
+ {name:'Singapore',hubs:['Marina Bay','Sentosa','Chinatown','Gardens by the Bay']},
+ {name:'Thailand',hubs:['Bangkok','Chiang Mai','Phuket','Krabi']},
+ {name:'Vietnam',hubs:['Hanoi','Da Nang','Hoi An','Ho Chi Minh City']},
+ {name:'Indonesia',hubs:['Bali','Jakarta','Yogyakarta','Lombok']},
+ {name:'Malaysia',hubs:['Kuala Lumpur','Penang','Langkawi','Sabah']},
+ {name:'Taiwan',hubs:['Taipei','Taichung','Kaohsiung','Hualien']},
+ {name:'Hong Kong',hubs:['Hong Kong Island','Kowloon','Lantau Island']},
+ {name:'Australia',hubs:['Sydney','Melbourne','Brisbane','Gold Coast']}
 ];
-let travelMode='local', selectedCountry=null;
+let selectedCountry=null;
 function setTravelMode(mode){
- travelMode=mode;
  $('localMode').classList.toggle('active',mode==='local');
  $('internationalMode').classList.toggle('active',mode==='international');
  $('localExplorer').style.display=mode==='local'?'block':'none';
@@ -199,19 +337,126 @@ function renderCountryDetail(){
    $('countrySubtitle').textContent='Choose a country from the list.';
    $('countryCount').textContent=internationalCountries.length+' countries';
    $('countryDescription').textContent='Choose a country to see suggested travel hubs and start planning your trip.';
-   $('countryDestinations').innerHTML="<div class='empty'>Choose a country to view its travel hubs.</div>";
+   $('countryDestinations').innerHTML='<div class="empty">Choose a country to view its travel hubs.</div>';
    return;
  }
  $('countryTitle').textContent=c.name;
  $('countrySubtitle').textContent='International destination';
  $('countryCount').textContent=c.hubs.length+' travel hubs';
- $('countryDescription').textContent='These are suggested starting points for exploring '+c.name+'. Select a city or area as the focus of your trip.';
+ $('countryDescription').textContent='Suggested starting points for exploring '+c.name+'.';
  $('countryDestinations').innerHTML=c.hubs.map((hub,i)=>`<article class="country-destination"><b>${hub}</b><small>Suggested destination ${i+1} · ${c.name}</small></article>`).join('');
 }
 $('localMode').addEventListener('click',()=>setTravelMode('local'));
 $('internationalMode').addEventListener('click',()=>setTravelMode('international'));
 $('countrySearch').addEventListener('input',renderCountries);
 
-function renderAll(){renderRegions();if(!island){$('regionTitle').textContent='Choose an island group';$('regionMeta').textContent='Select Luzon, Visayas or Mindanao above.';$('search').style.display='none';$('regionList').innerHTML='<div class="empty">Select an island group to see its administrative regions.</div>';$('provinceList').style.display='none';$('backRegions').style.display='none';renderDetailPrompt();return}if(!selectedRegion){renderRegionList();renderDetailPrompt()}else{renderProvinceList();if(province)renderProvince();else renderDetailPrompt()}}
+
+const travelChecklistData = {
+ local: [
+  {title:'Documents & bookings',items:[
+   'Valid government-issued ID','Transportation tickets or booking confirmation','Accommodation reservation details','Emergency contact information','Travel itinerary shared with someone you trust'
+  ]},
+  {title:'Budget & payments',items:[
+   'Set a travel budget and emergency allowance','Prepare cash for fares, food and small purchases','Bring ATM/debit/credit cards','Inform your bank if needed for card use'
+  ]},
+  {title:'Clothing & personal items',items:[
+   'Clothes appropriate for the weather and activities','Comfortable walking shoes or sandals','Sleepwear and extra change of clothes','Toiletries and personal hygiene items','Sunscreen, insect repellent and personal essentials'
+  ]},
+  {title:'Health & safety',items:[
+   'Personal medicines and prescriptions','Basic first-aid items','Check weather and local advisories','Save emergency numbers and accommodation contact','Bring water bottle and necessary protective gear'
+  ]},
+  {title:'Electronics',items:[
+   'Mobile phone and charger','Power bank','Earphones and other needed accessories','Download offline maps, tickets and important details'
+  ]},
+  {title:'Before leaving home',items:[
+   'Secure doors, windows and appliances','Arrange care for pets or plants if needed','Tell family or a trusted contact about your trip','Check transport schedules and meeting points'
+  ]}
+ ],
+ international: [
+  {title:'Passport & entry requirements',items:[
+   'Check passport validity for the destination and transit countries','Check visa or visa-free entry requirements','Prepare e-visa, entry permit or travel authorization if required','Check immigration rules, allowed stay and onward-ticket requirements','Prepare printed and digital copies of passport and visas'
+  ]},
+  {title:'Flights & accommodation',items:[
+   'Confirm flight tickets and baggage allowance','Check online check-in and airport arrival time','Confirm accommodation address and check-in instructions','Check transit airport and connection requirements','Save return or onward flight details'
+  ]},
+  {title:'Money & connectivity',items:[
+   'Prepare local currency and payment cards','Check foreign transaction fees and card access','Arrange roaming, eSIM or local SIM','Check plug type and bring a compatible travel adapter','Download offline maps and translation tools'
+  ]},
+  {title:'Health, insurance & safety',items:[
+   'Check travel health advice and required vaccinations','Arrange travel insurance and save policy details','Bring medicines in original packaging with prescriptions if needed','Check destination safety and current travel advisories','Save Philippine embassy or consulate contact details'
+  ]},
+  {title:'Packing & luggage',items:[
+   'Check airline cabin and checked baggage limits','Pack weather-appropriate clothing and comfortable shoes','Prepare toiletries within airline liquid restrictions','Keep valuables, documents and medicines in carry-on baggage','Label luggage and check restricted or prohibited items'
+  ]},
+  {title:'Home & departure',items:[
+   'Share itinerary and emergency contacts with family','Secure home, appliances and valuables','Arrange pet or plant care if needed','Check airport transfer and terminal details','Keep digital and printed copies of key documents'
+  ]}
+ ]
+};
+let checklistMode='local';
+let checklistState=JSON.parse(localStorage.getItem('lakbayTravelChecklistV1')||'{}');
+function checklistKey(mode,group,item){return mode+'|'+group+'|'+item}
+function renderChecklist(){
+ const data=travelChecklistData[checklistMode];
+ $('checkLocal').classList.toggle('active',checklistMode==='local');
+ $('checkInternational').classList.toggle('active',checklistMode==='international');
+ let total=0,done=0;
+ const groups=data.map((g,gi)=>{
+  const items=g.items.map((item,ii)=>{
+   const key=checklistKey(checklistMode,gi,ii);
+   const checked=!!checklistState[key];
+   total++;if(checked)done++;
+   return `<label class="check-item ${checked?'done':''}"><input type="checkbox" data-check-key="${key}" ${checked?'checked':''}><span>${item}</span></label>`;
+  }).join('');
+  return `<section class="check-group"><h3>${g.title}</h3>${items}</section>`;
+ }).join('');
+ const custom=(checklistState['custom_'+checklistMode]||[]);
+ const customHtml=custom.map((item,i)=>{
+  const key='customDone|'+checklistMode+'|'+i;
+  const checked=!!checklistState[key];
+  total++;if(checked)done++;
+  return `<label class="check-item ${checked?'done':''}"><input type="checkbox" data-check-key="${key}" ${checked?'checked':''}><span>${item}</span><button type="button" class="remove-task" data-remove-custom="${i}" aria-label="Remove task">×</button></label>`;
+ }).join('');
+ $('checklistGroups').innerHTML=groups+(custom.length?`<section class="check-group"><h3>My custom tasks</h3>${customHtml}</section>`:'');
+ const pct=total?Math.round(done/total*100):0;
+ $('checkProgress').textContent=pct+'%';
+ $('checkCount').textContent=done+' of '+total+' completed';
+ $('checkProgressBar').style.width=pct+'%';
+ document.querySelectorAll('[data-check-key]').forEach(c=>c.onchange=()=>{
+  checklistState[c.dataset.checkKey]=c.checked;
+  localStorage.setItem('lakbayTravelChecklistV1',JSON.stringify(checklistState));
+  renderChecklist();
+ });
+ document.querySelectorAll('[data-remove-custom]').forEach(b=>b.onclick=()=>{
+  const arr=checklistState['custom_'+checklistMode]||[];
+  arr.splice(+b.dataset.removeCustom,1);
+  checklistState['custom_'+checklistMode]=arr;
+  localStorage.setItem('lakbayTravelChecklistV1',JSON.stringify(checklistState));
+  renderChecklist();
+ });
+}
+$('checkLocal').addEventListener('click',()=>{checklistMode='local';renderChecklist()});
+$('checkInternational').addEventListener('click',()=>{checklistMode='international';renderChecklist()});
+$('addCustomTask').addEventListener('click',()=>{
+ const input=$('customTaskInput'),value=input.value.trim();
+ if(!value)return;
+ const arr=checklistState['custom_'+checklistMode]||[];
+ arr.push(value);checklistState['custom_'+checklistMode]=arr;
+ localStorage.setItem('lakbayTravelChecklistV1',JSON.stringify(checklistState));
+ input.value='';renderChecklist();
+});
+$('customTaskInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('addCustomTask').click()});
+$('checkAllBtn').addEventListener('click',()=>{
+ travelChecklistData[checklistMode].forEach((g,gi)=>g.items.forEach((item,ii)=>checklistState[checklistKey(checklistMode,gi,ii)]=true));
+ (checklistState['custom_'+checklistMode]||[]).forEach((item,i)=>checklistState['customDone|'+checklistMode+'|'+i]=true);
+ localStorage.setItem('lakbayTravelChecklistV1',JSON.stringify(checklistState));renderChecklist();
+});
+$('resetChecklistBtn').addEventListener('click',()=>{
+ if(!confirm('Reset all checked items and custom tasks for this travel type?'))return;
+ Object.keys(checklistState).forEach(k=>{if(k.startsWith(checklistMode+'|')||k.startsWith('customDone|'+checklistMode+'|')||k==='custom_'+checklistMode)delete checklistState[k]});
+ localStorage.setItem('lakbayTravelChecklistV1',JSON.stringify(checklistState));renderChecklist();
+});
+
+renderChecklist();
 renderAll();updateSavedCount();
 </script></body></html>
